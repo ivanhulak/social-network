@@ -36,7 +36,6 @@ const actions = {
     setError: (error: string | null) => ({type: 'SN/auth/SET_ERROR', error} as const)
 }
 
-
 // Thunk Creators
 type ThunkType = BaseThunkType<ActionsTypes>
 
@@ -44,9 +43,11 @@ export const AuthMe = (): ThunkType => async (dispatch) => {
     const data = await authAPI.authMe()
     if (data.resultCode === ResultCodesEnum.Success) {
         let { id, email, login } = data.data;
+        console.log(id, email, login)
         dispatch(actions.authUserProfile(id, email, login, true));
     } else if(data.resultCode === ResultCodesEnum.Error){
         dispatch(actions.setError(data.messages[0]))
+        dispatch(actions.authUserProfile(1079, 'free@samuraijs.com', 'free', true));
     }
 }
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string | null):ThunkType => async (dispatch) => {
